@@ -1,43 +1,45 @@
-import React, { useMemo, useState } from 'react';
-import { useChatStore } from '@chat/shared';
+import { useMemo, useState } from "react"
+import { useChatStore } from "@chat/shared"
 
 function formatTime(value: Date) {
-  return new Intl.DateTimeFormat('en', {
-    hour: 'numeric',
-    minute: '2-digit'
-  }).format(value);
+  return new Intl.DateTimeFormat("en", {
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(value)
 }
 
 export function Sidebar() {
-  const [query, setQuery] = useState('');
-  const chats = useChatStore((state) => state.chats);
-  const selectedChatId = useChatStore((state) => state.selectedChatId);
-  const sidebarOpen = useChatStore((state) => state.sidebarOpen);
-  const setSidebarOpen = useChatStore((state) => state.setSidebarOpen);
-  const selectChat = useChatStore((state) => state.selectChat);
-  const addChat = useChatStore((state) => state.addChat);
+  const [query, setQuery] = useState("")
+  const chats = useChatStore((state) => state.chats)
+  const selectedChatId = useChatStore((state) => state.selectedChatId)
+  const sidebarOpen = useChatStore((state) => state.sidebarOpen)
+  const setSidebarOpen = useChatStore((state) => state.setSidebarOpen)
+  const selectChat = useChatStore((state) => state.selectChat)
+  const addChat = useChatStore((state) => state.addChat)
 
   const filteredChats = useMemo(() => {
-    const normalized = query.trim().toLowerCase();
+    const normalized = query.trim().toLowerCase()
 
     if (!normalized) {
-      return chats;
+      return chats
     }
 
     return chats.filter((chat) => {
       return (
         chat.title.toLowerCase().includes(normalized) ||
         chat.lastMessage.toLowerCase().includes(normalized)
-      );
-    });
-  }, [chats, query]);
+      )
+    })
+  }, [chats, query])
 
   return (
     <aside
       className={[
-        'fixed inset-y-0 left-0 z-30 w-[22rem] max-w-[88vw] border-r border-white/10 bg-slate-950/80 shadow-[32px_0_80px_rgba(2,6,23,0.6)] backdrop-blur-2xl transition-transform duration-300 md:static md:z-auto md:w-[22rem] md:translate-x-0',
-        sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-      ].join(' ')}
+        "fixed inset-y-0 left-0 z-30 w-[22rem] max-w-[88vw] border-r border-white/10 bg-slate-950/80 shadow-[32px_0_80px_rgba(2,6,23,0.6)] backdrop-blur-2xl transition-transform duration-300 md:static md:z-auto md:w-[22rem] md:translate-x-0",
+        sidebarOpen
+          ? "translate-x-0"
+          : "-translate-x-full md:translate-x-0 border-amber-600",
+      ].join(" ")}
     >
       <div className="flex h-full flex-col">
         <div className="border-b border-white/10 px-5 py-5">
@@ -46,7 +48,9 @@ export function Sidebar() {
               <p className="text-xs uppercase tracking-[0.35em] text-cyan-200/70">
                 Conversations
               </p>
-              <h2 className="mt-2 text-2xl font-semibold text-white">Workspace</h2>
+              <h2 className="mt-2 text-2xl font-semibold text-white">
+                Workspace
+              </h2>
             </div>
 
             <button
@@ -73,7 +77,7 @@ export function Sidebar() {
 
           <button
             type="button"
-            onClick={() => addChat('Untitled chat')}
+            onClick={() => addChat("Untitled chat")}
             className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-cyan-300 px-4 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200"
           >
             <span className="text-base">+</span>
@@ -84,7 +88,7 @@ export function Sidebar() {
         <div className="min-h-0 flex-1 overflow-y-auto px-3 py-4">
           <div className="space-y-2">
             {filteredChats.map((chat) => {
-              const active = chat.id === selectedChatId;
+              const active = chat.id === selectedChatId
 
               return (
                 <button
@@ -92,11 +96,11 @@ export function Sidebar() {
                   type="button"
                   onClick={() => selectChat(chat.id)}
                   className={[
-                    'group w-full rounded-3xl border px-4 py-4 text-left transition duration-200',
+                    "group w-full rounded-3xl border px-4 py-4 text-left transition duration-200",
                     active
-                      ? 'border-cyan-300/40 bg-cyan-300/10 shadow-[0_10px_30px_rgba(8,145,178,0.18)]'
-                      : 'border-white/10 bg-white/[0.04] hover:border-white/20 hover:bg-white/[0.08]'
-                  ].join(' ')}
+                      ? "border-cyan-300/40 bg-cyan-300/10 shadow-[0_10px_30px_rgba(8,145,178,0.18)]"
+                      : "border-white/10 bg-white/[0.04] hover:border-white/20 hover:bg-white/[0.08]",
+                  ].join(" ")}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
@@ -120,7 +124,7 @@ export function Sidebar() {
                     </div>
                   </div>
                 </button>
-              );
+              )
             })}
           </div>
         </div>
@@ -135,7 +139,7 @@ export function Sidebar() {
         </div>
       </div>
     </aside>
-  );
+  )
 }
 
-export default Sidebar;
+export default Sidebar
