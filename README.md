@@ -20,7 +20,7 @@ A polished Nx-based demo of a React 19 chat experience composed from multiple mi
 
 ```text
 chat-llm-mfe/
-  host/                # shell app that hosts the remotes
+  host/               # shell app that hosts the remotes
   sidebar-remote/     # remote for the conversations sidebar
   chat-remote/        # remote for the chat panel
   shared/             # shared package with Zustand store and types
