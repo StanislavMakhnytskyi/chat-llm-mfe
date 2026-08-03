@@ -78,6 +78,7 @@ export function Sidebar() {
           <button
             type="button"
             onClick={() => addChat("Untitled chat")}
+            disabled={sidebarOpen && filteredChats.length >= 10}
             className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-cyan-300 px-4 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200"
           >
             <span className="text-base">+</span>
@@ -126,15 +127,6 @@ export function Sidebar() {
                 </button>
               )
             })}
-          </div>
-        </div>
-
-        <div className="border-t border-white/10 px-5 py-4">
-          <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-4">
-            <p className="text-sm font-medium text-white">Module Federation</p>
-            <p className="mt-1 text-sm leading-6 text-slate-300">
-              The shared Zustand store stays in sync across host and remotes.
-            </p>
           </div>
         </div>
       </div>
