@@ -1,0 +1,47 @@
+{
+  "name": "chat-llm-mfe",
+  "private": true,
+  "version": "0.0.0",
+  "workspaces": [
+    "shared"
+  ],
+  "scripts": {
+    "dev": "nx run-many -t serve --all --parallel=3",
+    "dev:host": "nx serve host",
+    "dev:sidebar": "nx serve sidebar-remote",
+    "dev:chat": "nx serve chat-remote",
+    "build": "nx run-many -t build --all",
+    "build:host": "nx build host",
+    "build:sidebar": "nx build sidebar-remote",
+    "build:chat": "nx build chat-remote",
+    "build:shared": "nx build shared",
+    "graph": "nx graph"
+  },
+  "dependencies": {
+    "@chat/shared": "workspace:*",
+    "@module-federation/enhanced": "2.8.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "zustand": "5.0.14"
+  },
+  "devDependencies": {
+    "@nx/js": "23.1.0",
+    "@nx/react": "23.1.0",
+    "@nx/webpack": "23.1.0",
+    "@tailwindcss/postcss": "4.3.3",
+    "@types/node": "26.1.1",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "css-loader": "7.1.4",
+    "html-webpack-plugin": "5.6.7",
+    "nx": "23.1.0",
+    "postcss": "8.5.23",
+    "postcss-loader": "8.2.1",
+    "style-loader": "4.0.0",
+    "tailwindcss": "4.3.3",
+    "ts-loader": "9.6.2",
+    "typescript": "5.9.2",
+    "webpack": "5.109.0",
+    "webpack-dev-server": "5.2.6"
+  }
+}

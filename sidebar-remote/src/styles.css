@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Manrope", "Inter", "Segoe UI", sans-serif;
+  --color-accent: #7dd3fc;
+  --color-accent-strong: #38bdf8;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top, rgba(56, 189, 248, 0.12), transparent 30%),
+    linear-gradient(180deg, #050816 0%, #070d18 100%);
+  color: white;
+  font-family: var(--font-sans);
+}

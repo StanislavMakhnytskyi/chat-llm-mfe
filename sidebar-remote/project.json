@@ -1,0 +1,29 @@
+{
+  "name": "sidebar-remote",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "sidebar-remote/src",
+  "targets": {
+    "serve": {
+      "executor": "@nx/webpack:dev-server",
+      "options": {
+        "buildTarget": "sidebar-remote:build",
+        "port": 3002,
+        "publicHost": "http://localhost:3002",
+        "hmr": true,
+        "open": false
+      }
+    },
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/sidebar-remote",
+        "webpackConfig": "sidebar-remote/webpack.config.ts",
+        "isolatedConfig": true
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "chat-remote",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "chat-remote/src",
+  "targets": {
+    "serve": {
+      "executor": "@nx/webpack:dev-server",
+      "options": {
+        "buildTarget": "chat-remote:build",
+        "port": 3003,
+        "publicHost": "http://localhost:3003",
+        "hmr": true,
+        "open": false
+      }
+    },
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/chat-remote",
+        "webpackConfig": "chat-remote/webpack.config.ts",
+        "isolatedConfig": true
+      }
+    }
+  }
+}

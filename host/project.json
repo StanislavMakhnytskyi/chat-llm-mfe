@@ -1,0 +1,29 @@
+{
+  "name": "host",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "host/src",
+  "targets": {
+    "serve": {
+      "executor": "@nx/webpack:dev-server",
+      "options": {
+        "buildTarget": "host:build",
+        "port": 3001,
+        "publicHost": "http://localhost:3001",
+        "hmr": true,
+        "open": false
+      }
+    },
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/host",
+        "webpackConfig": "host/webpack.config.ts",
+        "isolatedConfig": true
+      }
+    }
+  }
+}
