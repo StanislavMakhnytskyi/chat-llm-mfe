@@ -9,7 +9,7 @@ interface OverlayProviderProps {
 export const OverlayProvider: React.FC<OverlayProviderProps> = ({
   children,
 }) => {
-  const [isOverlayActive, setIsOverlayActive] = useState<boolean>(false)
+  const [isOverlayActive, setIsOverlayActive] = useState<boolean>(true)
   const [registrations, setRegistrations] = useState<
     Record<string, MfeRegistration>
   >({})

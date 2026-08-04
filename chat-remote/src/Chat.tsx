@@ -62,7 +62,7 @@ export function Chat() {
       <div className="flex items-center justify-between gap-4 border-b border-slate-200 bg-white px-4 py-4 md:px-6">
         <div className="min-w-0">
           <p className="text-xs uppercase tracking-[0.35em] text-cyan-600 font-bold">
-            Remote chat
+            Chat is another
           </p>
           <h2 className="mt-2 truncate text-xl font-semibold text-slate-900 md:text-2xl">
             {activeChat?.title ?? "No chat selected"}

@@ -33,10 +33,10 @@ export function Sidebar() {
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-xs uppercase tracking-[0.35em] text-cyan-600 font-bold">
-                Conversations
+                Sidebar is
               </p>
               <h2 className="mt-2 text-2xl font-semibold text-slate-900">
-                Workspace
+                One Microfrontend
               </h2>
             </div>
 
@@ -66,7 +66,7 @@ export function Sidebar() {
             type="button"
             onClick={() => addChat("Untitled chat")}
             disabled={sidebarOpen && filteredChats.length >= 10}
-            className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-cyan-600 px-4 text-sm font-semibold text-white transition hover:bg-cyan-700"
+            className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-cyan-600 px-4 text-sm font-semibold text-white transition hover:bg-cyan-700 cursor-pointer"
           >
             <span className="text-base">+</span>
             New chat
@@ -136,7 +136,7 @@ const sidebarVariants = cva(
 )
 
 const chatButtonVariants = cva(
-  "group w-full rounded-3xl border px-4 py-4 text-left transition duration-200",
+  "group w-full rounded-3xl border px-4 py-4 text-left transition duration-200 cursor-pointer",
   {
     variants: {
       active: {

@@ -126,7 +126,7 @@ export const MicrofrontendOverlay: React.FC = () => {
     <>
       <button
         onClick={toggleOverlay}
-        className="fixed top-6 right-6 z-[10000] bg-slate-900/90 hover:bg-slate-800 backdrop-blur-md text-slate-200 px-4 py-2 rounded-full shadow-2xl border border-slate-700 transition-all duration-200 flex items-center gap-3 font-mono text-sm pointer-events-auto"
+        className="fixed top-6 right-6 z-[10000] bg-slate-900/90 hover:bg-slate-800 backdrop-blur-md text-slate-200 px-4 py-2 rounded-full shadow-2xl border border-slate-700 transition-all duration-200 flex items-center gap-3 font-mono text-sm pointer-events-auto cursor-pointer"
         title="Toggle Microfrontend Overlay (Ctrl+Shift+M)"
       >
         <span className={indicatorVariants({ active: isOverlayActive })}></span>
@@ -188,16 +188,13 @@ export const MicrofrontendOverlay: React.FC = () => {
                         <span className="text-white font-medium">
                           Shared Zustand Store
                         </span>
-                        <span className="bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded text-[10px] font-bold border border-green-500/30">
-                          Sync
-                        </span>
                       </div>
                     </div>
 
                     {reg.description && (
                       <div className="pt-3 mt-3 border-t border-slate-700/50">
                         <span className="text-slate-300 italic">
-                          "{reg.description}"
+                          {reg.description}
                         </span>
                       </div>
                     )}

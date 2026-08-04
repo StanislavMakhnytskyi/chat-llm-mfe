@@ -39,9 +39,9 @@ const now = new Date()
 
 const mockChats: Chat[] = [
   {
-    id: "chat-design-system",
-    title: "Design system",
-    lastMessage: "The sidebar should feel like the ChatGPT web shell.",
+    id: "chat-microfrontend",
+    title: "Microfrontend",
+    lastMessage: "The sidebar and chat are separate microfrontends.",
     timestamp: new Date(now.getTime() - 1000 * 60 * 2),
     unread: 2,
   },
