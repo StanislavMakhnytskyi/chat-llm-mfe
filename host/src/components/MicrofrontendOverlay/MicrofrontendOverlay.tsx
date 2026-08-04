@@ -2,68 +2,6 @@ import React, { useEffect, useState, useRef } from "react"
 import { useOverlay } from "./OverlayContext"
 import { cva } from "class-variance-authority"
 
-const indicatorVariants = cva("w-2.5 h-2.5 rounded-full transition-colors", {
-  variants: {
-    active: {
-      true: "bg-emerald-500",
-      false: "bg-slate-300",
-    },
-  },
-})
-
-const overlayBoxVariants = cva(
-  "absolute rounded-2xl border-2 border-dashed animate-in fade-in duration-500",
-  {
-    variants: {
-      theme: {
-        sidebar: "border-indigo-400 bg-indigo-400/5",
-        chat: "border-emerald-400 bg-emerald-400/5",
-        default: "border-slate-400 bg-slate-400/5",
-      },
-    },
-    defaultVariants: {
-      theme: "default",
-    },
-  }
-)
-
-const badgeVariants = cva(
-  "text-[10px] font-bold tracking-wide px-2.5 py-1 rounded-full text-white",
-  {
-    variants: {
-      theme: {
-        sidebar: "bg-indigo-500",
-        chat: "bg-emerald-500",
-        default: "bg-slate-500",
-      },
-    },
-    defaultVariants: {
-      theme: "default",
-    },
-  }
-)
-
-const dotVariants = cva("w-2 h-2 rounded-full", {
-  variants: {
-    theme: {
-      sidebar: "bg-indigo-500",
-      chat: "bg-emerald-500",
-      default: "bg-slate-500",
-    },
-  },
-  defaultVariants: {
-    theme: "default",
-  },
-})
-
-type ThemeType = "sidebar" | "chat" | "default"
-const getThemeVariant = (name: string): ThemeType => {
-  const lowerName = name.toLowerCase()
-  if (lowerName.includes("sidebar")) return "sidebar"
-  if (lowerName.includes("chat")) return "chat"
-  return "default"
-}
-
 export const MicrofrontendOverlay: React.FC = () => {
   const { isOverlayActive, toggleOverlay, registrations } = useOverlay()
 
@@ -148,13 +86,6 @@ export const MicrofrontendOverlay: React.FC = () => {
 
       {isOverlayActive && (
         <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden animate-in fade-in duration-300">
-          {/* One-line explainer so the concept reads instantly, not just the boxes */}
-          <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-white border border-slate-200 shadow-md rounded-full px-4 py-2 text-sm text-slate-600 pointer-events-auto">
-            Each dashed box below is a{" "}
-            <span className="font-semibold text-slate-900">separate app</span>,
-            built and shipped on its own, stitched together on this page
-          </div>
-
           {Object.values(registrations).map((reg) => {
             const rect = rects[reg.id]
             if (!rect) return null
@@ -164,7 +95,7 @@ export const MicrofrontendOverlay: React.FC = () => {
             return (
               <div
                 key={reg.id}
-                className={overlayBoxVariants({ theme })}
+                className={`${overlayBoxVariants({ theme })} z-10`}
                 style={{
                   top: rect.top,
                   left: rect.left,
@@ -173,11 +104,16 @@ export const MicrofrontendOverlay: React.FC = () => {
                 }}
               >
                 <div className="absolute top-4 left-4 bg-white border border-slate-200 shadow-xl rounded-2xl p-4 w-80 font-sans pointer-events-auto">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-slate-900 font-bold text-lg flex items-center gap-2">
-                      <span className={dotVariants({ theme })}></span>
+                  <div className="flex items-start justify-between gap-3 mb-3 min-h-[3.25rem]">
+                    <h3 className="text-slate-900 font-bold text-lg leading-snug flex items-start gap-2">
+                      <span
+                        className={`${dotVariants({ theme })} mt-1.5 shrink-0`}
+                      ></span>
                       {reg.name}
                     </h3>
+                    <span className={`${badgeVariants({ theme })} shrink-0`}>
+                      Own app
+                    </span>
                   </div>
 
                   <div className="space-y-2.5 text-xs">
@@ -212,8 +148,8 @@ export const MicrofrontendOverlay: React.FC = () => {
                     </div>
 
                     {reg.description && (
-                      <div className="pt-3 mt-3 border-t border-slate-100">
-                        <span className="text-slate-500 italic leading-relaxed">
+                      <div className="pt-3 mt-3 border-t border-slate-100 min-h-[2.75rem]">
+                        <span className="text-slate-500 italic leading-relaxed line-clamp-2">
                           {reg.description}
                         </span>
                       </div>
@@ -227,4 +163,66 @@ export const MicrofrontendOverlay: React.FC = () => {
       )}
     </>
   )
+}
+
+const indicatorVariants = cva("w-2.5 h-2.5 rounded-full transition-colors", {
+  variants: {
+    active: {
+      true: "bg-emerald-500",
+      false: "bg-slate-300",
+    },
+  },
+})
+
+const overlayBoxVariants = cva(
+  "absolute rounded-2xl border-2 border-dashed animate-in fade-in duration-500",
+  {
+    variants: {
+      theme: {
+        sidebar: "border-indigo-400 bg-indigo-400/5",
+        chat: "border-emerald-400 bg-emerald-400/5",
+        default: "border-slate-400 bg-slate-400/5",
+      },
+    },
+    defaultVariants: {
+      theme: "default",
+    },
+  }
+)
+
+const badgeVariants = cva(
+  "text-[10px] font-bold tracking-wide px-2.5 py-1 rounded-full text-white",
+  {
+    variants: {
+      theme: {
+        sidebar: "bg-indigo-500",
+        chat: "bg-emerald-500",
+        default: "bg-slate-500",
+      },
+    },
+    defaultVariants: {
+      theme: "default",
+    },
+  }
+)
+
+const dotVariants = cva("w-2 h-2 rounded-full", {
+  variants: {
+    theme: {
+      sidebar: "bg-indigo-500",
+      chat: "bg-emerald-500",
+      default: "bg-slate-500",
+    },
+  },
+  defaultVariants: {
+    theme: "default",
+  },
+})
+
+type ThemeType = "sidebar" | "chat" | "default"
+const getThemeVariant = (name: string): ThemeType => {
+  const lowerName = name.toLowerCase()
+  if (lowerName.includes("sidebar")) return "sidebar"
+  if (lowerName.includes("chat")) return "chat"
+  return "default"
 }
