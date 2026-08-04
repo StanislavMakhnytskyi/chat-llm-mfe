@@ -1,0 +1,18 @@
+{
+  "buildCommand": "npm run build:vercel",
+  "outputDirectory": "dist/deploy",
+  "rewrites": [
+    {
+      "source": "/chat-remote/(.*)",
+      "destination": "/chat-remote/$1"
+    },
+    {
+      "source": "/sidebar-remote/(.*)",
+      "destination": "/sidebar-remote/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

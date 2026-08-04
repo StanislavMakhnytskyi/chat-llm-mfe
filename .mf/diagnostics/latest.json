@@ -1,0 +1,26 @@
+{
+  "bundler": {
+    "name": "webpack"
+  },
+  "mfConfig": {
+    "name": "sidebar_remote",
+    "exposes": {
+      "./Sidebar": "./src/Sidebar.tsx"
+    }
+  },
+  "latestErrorEvent": {
+    "code": "BUILD-001",
+    "message": "Failed to find expose module. #BUILD-001\nargs: {\"exposeModules\":[{\"name\":\"./Sidebar\",\"module\":null,\"request\":\"./src/Sidebar.tsx\"}],\"FEDERATION_WEBPACK_PATH\":\"\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/build#build-001",
+    "args": {
+      "exposeModules": [
+        {
+          "name": "./Sidebar",
+          "module": null,
+          "request": "./src/Sidebar.tsx"
+        }
+      ],
+      "FEDERATION_WEBPACK_PATH": ""
+    },
+    "timestamp": 1785851954117
+  }
+}

@@ -15,7 +15,8 @@
     "build:sidebar": "nx build sidebar-remote",
     "build:chat": "nx build chat-remote",
     "build:shared": "nx build shared",
-    "graph": "nx graph"
+    "graph": "nx graph",
+    "build:vercel": "node ./tools/build-vercel.js"
   },
   "dependencies": {
     "@chat/shared": "workspace:*",
