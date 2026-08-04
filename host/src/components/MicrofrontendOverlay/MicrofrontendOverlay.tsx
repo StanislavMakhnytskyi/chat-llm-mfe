@@ -5,20 +5,20 @@ import { cva } from "class-variance-authority"
 const indicatorVariants = cva("w-2.5 h-2.5 rounded-full transition-colors", {
   variants: {
     active: {
-      true: "bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]",
-      false: "bg-slate-500",
+      true: "bg-emerald-500",
+      false: "bg-slate-300",
     },
   },
 })
 
 const overlayBoxVariants = cva(
-  "absolute rounded-xl border-2 border-dashed animate-in fade-in duration-500",
+  "absolute rounded-2xl border-2 border-dashed animate-in fade-in duration-500",
   {
     variants: {
       theme: {
-        sidebar: "border-blue-500 bg-blue-500/10",
-        chat: "border-green-500 bg-green-500/10",
-        default: "border-gray-500 bg-gray-500/10",
+        sidebar: "border-indigo-400 bg-indigo-400/5",
+        chat: "border-emerald-400 bg-emerald-400/5",
+        default: "border-slate-400 bg-slate-400/5",
       },
     },
     defaultVariants: {
@@ -28,13 +28,13 @@ const overlayBoxVariants = cva(
 )
 
 const badgeVariants = cva(
-  "text-[10px] font-black tracking-wider px-2 py-1 rounded text-white",
+  "text-[10px] font-bold tracking-wide px-2.5 py-1 rounded-full text-white",
   {
     variants: {
       theme: {
-        sidebar: "bg-blue-600",
-        chat: "bg-green-600",
-        default: "bg-gray-600",
+        sidebar: "bg-indigo-500",
+        chat: "bg-emerald-500",
+        default: "bg-slate-500",
       },
     },
     defaultVariants: {
@@ -42,6 +42,19 @@ const badgeVariants = cva(
     },
   }
 )
+
+const dotVariants = cva("w-2 h-2 rounded-full", {
+  variants: {
+    theme: {
+      sidebar: "bg-indigo-500",
+      chat: "bg-emerald-500",
+      default: "bg-slate-500",
+    },
+  },
+  defaultVariants: {
+    theme: "default",
+  },
+})
 
 type ThemeType = "sidebar" | "chat" | "default"
 const getThemeVariant = (name: string): ThemeType => {
@@ -126,15 +139,22 @@ export const MicrofrontendOverlay: React.FC = () => {
     <>
       <button
         onClick={toggleOverlay}
-        className="fixed top-6 right-6 z-[10000] bg-slate-900/90 hover:bg-slate-800 backdrop-blur-md text-slate-200 px-4 py-2 rounded-full shadow-2xl border border-slate-700 transition-all duration-200 flex items-center gap-3 font-mono text-sm pointer-events-auto cursor-pointer"
+        className="fixed top-6 right-6 z-[10000] bg-white hover:bg-slate-50 text-slate-700 px-4 py-2 rounded-full shadow-lg border border-slate-200 transition-all duration-200 flex items-center gap-3 font-medium text-sm pointer-events-auto cursor-pointer"
         title="Toggle Microfrontend Overlay (Ctrl+Shift+M)"
       >
         <span className={indicatorVariants({ active: isOverlayActive })}></span>
-        {isOverlayActive ? "Demo Mode: ON" : "Demo Mode: OFF"}
+        {isOverlayActive ? "Explain this layout: ON" : "Explain this layout"}
       </button>
 
       {isOverlayActive && (
-        <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden animate-in fade-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden animate-in fade-in duration-300">
+          {/* One-line explainer so the concept reads instantly, not just the boxes */}
+          <div className="absolute top-6 left-1/2 -translate-x-1/2 bg-white border border-slate-200 shadow-md rounded-full px-4 py-2 text-sm text-slate-600 pointer-events-auto">
+            Each dashed box below is a{" "}
+            <span className="font-semibold text-slate-900">separate app</span>,
+            built and shipped on its own, stitched together on this page
+          </div>
+
           {Object.values(registrations).map((reg) => {
             const rect = rects[reg.id]
             if (!rect) return null
@@ -152,48 +172,48 @@ export const MicrofrontendOverlay: React.FC = () => {
                   height: rect.height,
                 }}
               >
-                <div className="absolute top-4 left-4 bg-slate-900/95 backdrop-blur-md border border-slate-700 shadow-2xl rounded-xl p-4 w-80 font-sans pointer-events-auto">
+                <div className="absolute top-4 left-4 bg-white border border-slate-200 shadow-xl rounded-2xl p-4 w-80 font-sans pointer-events-auto">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-white font-bold text-lg flex items-center gap-2">
+                    <h3 className="text-slate-900 font-bold text-lg flex items-center gap-2">
+                      <span className={dotVariants({ theme })}></span>
                       {reg.name}
                     </h3>
-                    <span className={badgeVariants({ theme })}>REMOTE</span>
                   </div>
 
-                  <div className="space-y-2 text-xs">
+                  <div className="space-y-2.5 text-xs">
                     <div className="flex justify-between">
-                      <span className="text-slate-400">Team</span>
-                      <span className="text-white font-medium">{reg.team}</span>
+                      <span className="text-slate-400">Built by</span>
+                      <span className="text-slate-700 font-medium">
+                        {reg.team}
+                      </span>
                     </div>
 
                     <div className="flex justify-between">
-                      <span className="text-slate-400">Technology</span>
-                      <span className="text-white font-medium">
+                      <span className="text-slate-400">Built with</span>
+                      <span className="text-slate-700 font-medium">
                         {reg.technology}
                       </span>
                     </div>
 
-                    <div className="flex flex-col gap-1 pt-1">
-                      <span className="text-slate-400">Deployment</span>
-                      <span className="text-white font-medium flex items-center gap-2">
-                        <span className="bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded text-[12px] font-bold border border-green-500/30">
-                          Independent
-                        </span>
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-slate-400">Ships on its own?</span>
+                      <span className="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full text-[11px] font-semibold border border-emerald-200">
+                        Yes, independently
                       </span>
                     </div>
 
-                    <div className="flex flex-col gap-1 pt-1">
-                      <span className="text-slate-400">State</span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-white font-medium">
-                          Shared Zustand Store
-                        </span>
-                      </div>
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-slate-400">
+                        Talks to other apps via
+                      </span>
+                      <span className="text-slate-700 font-medium">
+                        Shared Zustand store
+                      </span>
                     </div>
 
                     {reg.description && (
-                      <div className="pt-3 mt-3 border-t border-slate-700/50">
-                        <span className="text-slate-300 italic">
+                      <div className="pt-3 mt-3 border-t border-slate-100">
+                        <span className="text-slate-500 italic leading-relaxed">
                           {reg.description}
                         </span>
                       </div>
