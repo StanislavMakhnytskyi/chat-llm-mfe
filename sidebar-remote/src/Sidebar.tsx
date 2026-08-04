@@ -1,12 +1,6 @@
 import { useMemo, useState } from "react"
 import { useChatStore } from "@chat/shared"
-
-function formatTime(value: Date) {
-  return new Intl.DateTimeFormat("en", {
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(value)
-}
+import { cva } from "class-variance-authority"
 
 export function Sidebar() {
   const [query, setQuery] = useState("")
@@ -33,22 +27,15 @@ export function Sidebar() {
   }, [chats, query])
 
   return (
-    <aside
-      className={[
-        "fixed inset-y-0 left-0 z-30 w-[22rem] max-w-[88vw] border-r border-white/10 bg-slate-950/80 shadow-[32px_0_80px_rgba(2,6,23,0.6)] backdrop-blur-2xl transition-transform duration-300 md:static md:z-auto md:w-[22rem] md:translate-x-0",
-        sidebarOpen
-          ? "translate-x-0"
-          : "-translate-x-full md:translate-x-0 border-amber-600",
-      ].join(" ")}
-    >
+    <aside className={sidebarVariants({ open: sidebarOpen })}>
       <div className="flex h-full flex-col">
-        <div className="border-b border-white/10 px-5 py-5">
+        <div className="border-b border-slate-200 px-5 py-5">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.35em] text-cyan-200/70">
+              <p className="text-xs uppercase tracking-[0.35em] text-cyan-600 font-bold">
                 Conversations
               </p>
-              <h2 className="mt-2 text-2xl font-semibold text-white">
+              <h2 className="mt-2 text-2xl font-semibold text-slate-900">
                 Workspace
               </h2>
             </div>
@@ -56,21 +43,21 @@ export function Sidebar() {
             <button
               type="button"
               onClick={() => setSidebarOpen(false)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-lg text-white transition hover:border-cyan-300/40 hover:bg-cyan-300/10 md:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-lg text-slate-700 transition hover:border-slate-300 hover:bg-slate-100 md:hidden"
               aria-label="Close sidebar"
             >
               X
             </button>
           </div>
 
-          <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-1">
+          <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-1">
             <label className="flex items-center gap-3 rounded-xl px-3 py-2">
-              <span className="text-sm text-cyan-100/70">/</span>
+              <span className="text-sm text-slate-400">/</span>
               <input
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search chats"
-                className="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-400"
+                className="w-full bg-transparent text-sm text-slate-900 outline-none placeholder:text-slate-500"
               />
             </label>
           </div>
@@ -79,7 +66,7 @@ export function Sidebar() {
             type="button"
             onClick={() => addChat("Untitled chat")}
             disabled={sidebarOpen && filteredChats.length >= 10}
-            className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-cyan-300 px-4 text-sm font-semibold text-slate-950 transition hover:bg-cyan-200"
+            className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-2xl bg-cyan-600 px-4 text-sm font-semibold text-white transition hover:bg-cyan-700"
           >
             <span className="text-base">+</span>
             New chat
@@ -96,19 +83,14 @@ export function Sidebar() {
                   key={chat.id}
                   type="button"
                   onClick={() => selectChat(chat.id)}
-                  className={[
-                    "group w-full rounded-3xl border px-4 py-4 text-left transition duration-200",
-                    active
-                      ? "border-cyan-300/40 bg-cyan-300/10 shadow-[0_10px_30px_rgba(8,145,178,0.18)]"
-                      : "border-white/10 bg-white/[0.04] hover:border-white/20 hover:bg-white/[0.08]",
-                  ].join(" ")}
+                  className={chatButtonVariants({ active })}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-white">
+                      <p className="truncate text-sm font-semibold text-slate-900">
                         {chat.title}
                       </p>
-                      <p className="mt-1 max-h-12 overflow-hidden text-sm leading-6 text-slate-300">
+                      <p className="mt-1 max-h-12 overflow-hidden text-sm leading-6 text-slate-500">
                         {chat.lastMessage}
                       </p>
                     </div>
@@ -118,7 +100,7 @@ export function Sidebar() {
                         {formatTime(chat.timestamp)}
                       </span>
                       {chat.unread > 0 ? (
-                        <span className="rounded-full bg-cyan-300 px-2.5 py-1 text-xs font-semibold text-slate-950">
+                        <span className="rounded-full bg-cyan-600 px-2.5 py-1 text-xs font-semibold text-white">
                           {chat.unread}
                         </span>
                       ) : null}
@@ -133,5 +115,36 @@ export function Sidebar() {
     </aside>
   )
 }
+
+function formatTime(value: Date) {
+  return new Intl.DateTimeFormat("en", {
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(value)
+}
+
+const sidebarVariants = cva(
+  "fixed inset-y-0 left-0 z-30 w-[22rem] max-w-[88vw] border-r border-slate-200 bg-white/95 backdrop-blur-2xl transition-transform duration-300 md:static md:z-auto md:w-[22rem] md:translate-x-0",
+  {
+    variants: {
+      open: {
+        true: "translate-x-0 shadow-xl md:shadow-none",
+        false: "-translate-x-full md:translate-x-0 border-transparent",
+      },
+    },
+  }
+)
+
+const chatButtonVariants = cva(
+  "group w-full rounded-3xl border px-4 py-4 text-left transition duration-200",
+  {
+    variants: {
+      active: {
+        true: "border-cyan-200 bg-cyan-50",
+        false: "border-transparent bg-transparent hover:bg-slate-100",
+      },
+    },
+  }
+)
 
 export default Sidebar

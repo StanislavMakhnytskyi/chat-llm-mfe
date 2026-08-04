@@ -2,12 +2,12 @@
 
 @theme {
   --font-sans: "Manrope", "Inter", "Segoe UI", sans-serif;
-  --color-accent: #7dd3fc;
-  --color-accent-strong: #38bdf8;
+  --color-accent: #0284c7;
+  --color-accent-strong: #0369a1;
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 * {
@@ -22,9 +22,11 @@ body,
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at top right, rgba(56, 189, 248, 0.12), transparent 28%),
-    linear-gradient(180deg, #050816 0%, #070d18 100%);
-  color: white;
+  background: #f8fafc;
+  color: #0f172a;
   font-family: var(--font-sans);
+}
+
+::selection {
+  background: rgba(14, 165, 233, 0.2);
 }

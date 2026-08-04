@@ -2,7 +2,11 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "../dist/out-tsc/host",
-    "types": ["node"]
+    "types": ["node"],
+    "paths": {
+      "sidebar_remote/*": ["@mf-types/sidebar_remote/*"],
+      "chat_remote/*": ["@mf-types/chat_remote/*"]
+    }
   },
   "include": ["src/**/*", "./webpack.config.ts"],
   "exclude": ["node_modules", "dist"]

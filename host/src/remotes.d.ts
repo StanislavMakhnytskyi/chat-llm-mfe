@@ -1,13 +1,13 @@
-declare module 'sidebar_remote/Sidebar' {
-  import type { ComponentType } from 'react';
+declare module "sidebar_remote/Sidebar" {
+  import type { ComponentType } from "react"
 
-  const Sidebar: ComponentType;
-  export default Sidebar;
+  const Sidebar: ComponentType
+  export default Sidebar
 }
 
-declare module 'chat_remote/Chat' {
-  import type { ComponentType } from 'react';
+declare module "chat_remote/Chat" {
+  import type { ComponentType } from "react"
 
-  const Chat: ComponentType;
-  export default Chat;
+  const Chat: ComponentType
+  export default Chat
 }

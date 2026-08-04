@@ -1,10 +1,65 @@
 import React, { useEffect, useState, useRef } from "react"
 import { useOverlay } from "./OverlayContext"
+import { cva } from "class-variance-authority"
+
+const indicatorVariants = cva("w-2.5 h-2.5 rounded-full transition-colors", {
+  variants: {
+    active: {
+      true: "bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]",
+      false: "bg-slate-500",
+    },
+  },
+})
+
+const overlayBoxVariants = cva(
+  "absolute rounded-xl border-2 border-dashed animate-in fade-in duration-500",
+  {
+    variants: {
+      theme: {
+        sidebar: "border-blue-500 bg-blue-500/10",
+        chat: "border-green-500 bg-green-500/10",
+        default: "border-gray-500 bg-gray-500/10",
+      },
+    },
+    defaultVariants: {
+      theme: "default",
+    },
+  }
+)
+
+const badgeVariants = cva(
+  "text-[10px] font-black tracking-wider px-2 py-1 rounded text-white",
+  {
+    variants: {
+      theme: {
+        sidebar: "bg-blue-600",
+        chat: "bg-green-600",
+        default: "bg-gray-600",
+      },
+    },
+    defaultVariants: {
+      theme: "default",
+    },
+  }
+)
+
+type ThemeType = "sidebar" | "chat" | "default"
+const getThemeVariant = (name: string): ThemeType => {
+  const lowerName = name.toLowerCase()
+  if (lowerName.includes("sidebar")) return "sidebar"
+  if (lowerName.includes("chat")) return "chat"
+  return "default"
+}
 
 export const MicrofrontendOverlay: React.FC = () => {
   const { isOverlayActive, toggleOverlay, registrations } = useOverlay()
-  const [rects, setRects] = useState<Record<string, DOMRect>>({})
-  const rectsRef = useRef<Record<string, DOMRect>>({})
+
+  const [rects, setRects] = useState<
+    Record<string, { top: number; left: number; width: number; height: number }>
+  >({})
+  const rectsRef = useRef<
+    Record<string, { top: number; left: number; width: number; height: number }>
+  >({})
 
   useEffect(() => {
     if (!isOverlayActive) return
@@ -17,16 +72,23 @@ export const MicrofrontendOverlay: React.FC = () => {
 
       Object.values(registrations).forEach((reg) => {
         if (reg.element) {
-          // Retrieve the actual remote element rather than the display:contents wrapper
           const targetElement = (reg.element.firstElementChild ||
             reg.element) as HTMLElement
-          const rect = targetElement.getBoundingClientRect()
+          const rawRect = targetElement.getBoundingClientRect()
+
+          const rect = {
+            top: Math.round(rawRect.top),
+            left: Math.round(rawRect.left),
+            width: Math.round(rawRect.width),
+            height: Math.round(rawRect.height),
+          }
+
           const prev = newRects[reg.id]
 
           if (
             !prev ||
-            prev.x !== rect.x ||
-            prev.y !== rect.y ||
+            prev.left !== rect.left ||
+            prev.top !== rect.top ||
             prev.width !== rect.width ||
             prev.height !== rect.height
           ) {
@@ -46,9 +108,7 @@ export const MicrofrontendOverlay: React.FC = () => {
 
     rafId = requestAnimationFrame(updatePositions)
 
-    const resizeObserver = new ResizeObserver(() => {
-      // Observer triggers layout reads if needed, rAF handles the animation frame
-    })
+    const resizeObserver = new ResizeObserver(() => {})
 
     Object.values(registrations).forEach((reg) => {
       if (reg.element && reg.element.firstElementChild) {
@@ -62,64 +122,29 @@ export const MicrofrontendOverlay: React.FC = () => {
     }
   }, [isOverlayActive, registrations])
 
-  const getThemeColors = (name: string) => {
-    const lowerName = name.toLowerCase()
-    if (lowerName.includes("sidebar")) {
-      return {
-        border: "border-blue-500",
-        bg: "bg-blue-500/10",
-        badge: "bg-blue-600",
-        text: "text-blue-400",
-      }
-    }
-    if (lowerName.includes("chat")) {
-      return {
-        border: "border-green-500",
-        bg: "bg-green-500/10",
-        badge: "bg-green-600",
-        text: "text-green-400",
-      }
-    }
-    return {
-      border: "border-gray-500",
-      bg: "bg-gray-500/10",
-      badge: "bg-gray-600",
-      text: "text-gray-400",
-    }
-  }
-
   return (
     <>
-      {/* Persistent Toggle Button */}
       <button
         onClick={toggleOverlay}
         className="fixed top-6 right-6 z-[10000] bg-slate-900/90 hover:bg-slate-800 backdrop-blur-md text-slate-200 px-4 py-2 rounded-full shadow-2xl border border-slate-700 transition-all duration-200 flex items-center gap-3 font-mono text-sm pointer-events-auto"
         title="Toggle Microfrontend Overlay (Ctrl+Shift+M)"
       >
-        <span
-          className={`w-2.5 h-2.5 rounded-full transition-colors ${
-            isOverlayActive
-              ? "bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.6)]"
-              : "bg-slate-500"
-          }`}
-        ></span>
+        <span className={indicatorVariants({ active: isOverlayActive })}></span>
         {isOverlayActive ? "Demo Mode: ON" : "Demo Mode: OFF"}
       </button>
 
-      {/* Main Overlay Contents */}
       {isOverlayActive && (
         <div className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden animate-in fade-in zoom-in-95 duration-300">
-          {/* Render boundaries */}
           {Object.values(registrations).map((reg) => {
             const rect = rects[reg.id]
             if (!rect) return null
 
-            const theme = getThemeColors(reg.name)
+            const theme = getThemeVariant(reg.name)
 
             return (
               <div
                 key={reg.id}
-                className={`absolute rounded-xl border-2 border-dashed ${theme.border} ${theme.bg} animate-in fade-in duration-500`}
+                className={overlayBoxVariants({ theme })}
                 style={{
                   top: rect.top,
                   left: rect.left,
@@ -127,17 +152,12 @@ export const MicrofrontendOverlay: React.FC = () => {
                   height: rect.height,
                 }}
               >
-                {/* Floating Info Card */}
                 <div className="absolute top-4 left-4 bg-slate-900/95 backdrop-blur-md border border-slate-700 shadow-2xl rounded-xl p-4 w-80 font-sans pointer-events-auto">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-white font-bold text-lg flex items-center gap-2">
                       {reg.name}
                     </h3>
-                    <span
-                      className={`text-[10px] font-black tracking-wider px-2 py-1 rounded text-white ${theme.badge}`}
-                    >
-                      REMOTE
-                    </span>
+                    <span className={badgeVariants({ theme })}>REMOTE</span>
                   </div>
 
                   <div className="space-y-2 text-xs">
